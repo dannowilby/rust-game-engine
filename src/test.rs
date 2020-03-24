@@ -6,11 +6,13 @@ use glfw::{Action, Key};
 use crate::shader::{ create_shader };
 use crate::mesh::{ build_vao, render_mesh_system };
 
+use crate::player::{ default_camera_controls };
+
 use nalgebra::{ Vector4 };
 
 fn test_system(window: &glfw::Window, state: &mut GameStateData) {
 
-  if window.get_key(Key::W) == Action::Press {
+  if window.get_key(Key::F) == Action::Press {
     
     let t1 = state.components.get_vec3f("position", 0);
     state.components.set_vec3f("position", 0, [ t1[0] + 0.1, t1[1] + 0.1, t1[2] + 0.1 ]);
@@ -33,15 +35,16 @@ pub fn init_test_state(gs: &mut GameState) {
   let e1 = gs.data.entities.create_entity(0);
 
   let (vao, len) = build_vao(vec![
-    0.5, -0.5, 0.0,
-    -0.5, -0.5, 0.0,
-    0.0,  0.5, 0.0,
+     0.0,  0.0, -1.0,
+     0.0,  0.5, -1.0,
+     0.5,  0.0, -1.0,
   ]);
   let shader = create_shader("shaders/vertex.sf", "shaders/fragment.sf");
 
   gs.data.components.set_vec4u("mesh", e1, Vector4::new(vao, shader, 0u32, len as u32));
 
   gs.systems.push(render_mesh_system);
+  gs.systems.push(default_camera_controls);
   gs.systems.push(test_system);
 
   gs.data.lua.context(|_lua_ctx| {
@@ -61,5 +64,7 @@ pub fn destroy_test_state(gs: &mut GameState) {
   gs.data.lua.context(|_lua_ctx| {
     //_lua_ctx.load("test()").eval::<()>();
   });
+
+  gs.data.entities.kill_entity(&mut gs.data.components, 0);
 
 }

@@ -1,7 +1,8 @@
 
-use crate::state::{ GameState };
-
 use glfw::{Action, Context, Key};
+
+use crate::state::{ GameState };
+use crate::player::{ update_projection };
 
 pub struct Engine {
   states: Vec<GameState>,
@@ -24,7 +25,6 @@ impl Engine {
   pub fn add_state(&mut self, state: GameState) {
     self.states.push(state);
   }
-
 }
 
 pub fn default_events(window: &mut glfw::Window, event: &glfw::WindowEvent) {
@@ -47,6 +47,8 @@ pub fn start_engine(engine: &mut Engine, glfw: &mut glfw::Glfw, window: &mut glf
     window.swap_buffers();
     glfw.poll_events();
 
+    update_projection(&mut current_state.data.player, &window);
+
     unsafe { gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT); }
 
     // systems execute
@@ -58,5 +60,4 @@ pub fn start_engine(engine: &mut Engine, glfw: &mut glfw::Glfw, window: &mut glf
   }
  
   current_state.destroy();
-  
 }

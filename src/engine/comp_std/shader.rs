@@ -4,9 +4,21 @@ use std::ffi::{ CString };
 use std::ptr;
 use std::str;
 
+use nalgebra::{ Matrix4 };
+
 pub fn use_shader(shader: u32) {
   unsafe {
     gl::UseProgram(shader);
+  }
+}
+
+pub fn set_matrix_uniform(shader: u32, name: &str, matrix: &Matrix4<f32>) {
+
+  unsafe {
+    
+    let location = gl::GetUniformLocation(shader, CString::new(name.as_bytes()).unwrap().as_ptr());
+  
+    gl::UniformMatrix4fv(location, 1, gl::FALSE, matrix.as_ptr());
   }
 }
 

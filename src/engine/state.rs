@@ -3,6 +3,10 @@ use crate::entity::{ EntityManager };
 use crate::component::{ ComponentManager };
 use crate::system::{ SystemManager };
 
+use crate::player::{ Player };
+
+use nalgebra::{ Matrix4 };
+
 use rlua::{ Lua };
 
 pub struct GameState {
@@ -20,6 +24,8 @@ pub struct GameStateData {
   pub entities: EntityManager,
   pub components: ComponentManager,
 
+  pub player: Player,
+
   pub lua: Lua,
 }
 
@@ -33,7 +39,13 @@ impl GameState {
       data: GameStateData {
 
         entities: EntityManager::new(),
-        components: ComponentManager::new(),  
+        components: ComponentManager::new(),
+
+        player: Player {
+          projection: Matrix4::identity(),
+          size: (0, 0),
+          camera: Matrix4::identity(),
+        },
 
         lua: Lua::new(),
       },

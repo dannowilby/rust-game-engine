@@ -1,7 +1,7 @@
 
 use crate::state::{ GameStateData };
 
-use crate::shader::{ use_shader };
+use crate::shader::{ use_shader, set_matrix_uniform };
 
 use std::ptr;
 use std::mem;
@@ -44,6 +44,10 @@ pub fn render_mesh_system(window: &glfw::Window, state: &mut GameStateData) {
     let v = state.components.get_vec4u("mesh", *e);
     
     use_shader(v.y);
+    
+    set_matrix_uniform(v.y, "projection", &state.player.projection);
+    set_matrix_uniform(v.y, "view", &state.player.camera);
+    set_matrix_uniform(v.y, "model", &state.player.camera);
 
     unsafe {
       gl::BindVertexArray(v.x);
