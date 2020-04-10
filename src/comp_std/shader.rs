@@ -6,9 +6,26 @@ use std::str;
 
 use nalgebra::{ Matrix4 };
 
+use crate::component::{ Component, ArrayStorage };
+
+pub struct Shader {
+  pub id: u32,
+}
+impl Component for Shader { type Storage = ArrayStorage<Self>; }
+
 pub fn use_shader(shader: u32) {
   unsafe {
     gl::UseProgram(shader);
+  }
+}
+
+pub fn set_int_uniform(shader: u32, name: &str, data: u32) {
+
+  unsafe {
+    
+    let location = gl::GetUniformLocation(shader, CString::new(name.as_bytes()).unwrap().as_ptr());
+  
+    gl::Uniform1i(location, data as i32);
   }
 }
 

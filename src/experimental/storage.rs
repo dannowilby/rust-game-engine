@@ -30,7 +30,7 @@ pub trait Storage<T>: Any {
 }
 
 pub struct ArrayStorage<T: 'static> {
-  pub internal: [Option<T>; MAX_ENTITIES],
+  internal: [Option<T>; MAX_ENTITIES],
 }
 
 impl<T> Storage<T> for ArrayStorage<T> {
@@ -69,7 +69,7 @@ impl ComponentManager {
             Some(probably_storage) => {
                 match probably_storage.downcast_mut::<<C as Component>::Storage>() {
                     Some(storage) => storage,
-                    None => unreachable!(),
+                    None => unreachable!(), // <- you may want to do something less explosive here
                 }
             }
             None => unreachable!(),
@@ -81,10 +81,41 @@ impl ComponentManager {
             Some(probably_storage) => {
                 match probably_storage.downcast_ref::<<C as Component>::Storage>() {
                     Some(storage) => Some(storage),
-                    None => unreachable!(),
+                    None => unreachable!(), // <- you may want to do something less explosive here
                 }
             }
             None => None,
         }
     }
+}
+
+// struct Vec2(f64, f64);
+// impl Component for Vec2 { type Storage = ArrayStorage<Self>; }
+
+pub fn test() {
+  // let mut c_mgr: ComponentManager = ComponentManager::new();
+  
+  /*
+  let mut storage = (c_mgr).get_storage_mut::<Vec2i>("position");
+
+  let mut counter = 0;
+  for n in 0..MAX_ENTITIES {
+    storage.set(n, Vec2i(0 + counter, 0 + counter));
+    counter = counter + 1;
+  }
+
+  let store = c_mgr.get_storage::<Vec2i>("position").unwrap();
+
+  println!("size {}", mem::size_of::<[Option<RenderMesh>; MAX_ENTITIES]>());
+
+  for n in 0..MAX_ENTITIES {
+    if let Some(i) = &store.internal[n] {
+      
+      // bind and render the vaos or whatev
+      let Vec2i(x, y) = i;
+
+      println!("entity: {}, x: {}, y: {}, x + y: {}", n, x, y, x + y);
+    }
+  }
+  */
 }

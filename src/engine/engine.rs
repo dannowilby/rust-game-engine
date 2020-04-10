@@ -2,7 +2,8 @@
 use glfw::{Action, Context, Key};
 
 use crate::state::{ GameState };
-use crate::player::{ update_projection };
+
+use crate::profiler::{ Profiler };
 
 pub struct Engine {
   states: Vec<GameState>,
@@ -42,21 +43,25 @@ pub fn start_engine(engine: &mut Engine, glfw: &mut glfw::Glfw, window: &mut glf
   let current_state = &mut engine.states[engine.current_state];
   current_state.init();
 
+  let mut timer = Profiler::new();
+
   while !window.should_close() {
     
+    timer.start();
+
     window.swap_buffers();
     glfw.poll_events();
-
-    update_projection(&mut current_state.data.player, &window);
 
     unsafe { gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT); }
 
     // systems execute
-    current_state.systems.execute(&window, &mut current_state.data);
+    current_state.systems.execute(&window, &mut current_state.data, timer.delta);
 
     for (_, event) in glfw::flush_messages(&events) {
       default_events(window, &event);
     }
+
+    timer.end();
   }
  
   current_state.destroy();

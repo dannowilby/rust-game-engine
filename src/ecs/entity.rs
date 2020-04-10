@@ -16,15 +16,15 @@ impl EntityManager {
   }
 
   pub fn create_entity(&mut self, entity: Entity) -> Entity {
-    self.entities.insert(entity);
+    //self.entities.insert(entity);
     entity
   }
 
   // does not remove entity from vector yet--is TODO
   pub fn kill_entity(&mut self, component_manager: &mut ComponentManager, entity: Entity) {
 
-    component_manager.delete_entity_entries(entity);
-    self.entities.remove(&entity);
+    //component_manager.delete_entity_entries(entity);
+    //self.entities.remove(&entity);
   }
 }
 

@@ -13,13 +13,13 @@ impl<T> SystemManager<T> {
     self.systems.push(sys);
   }
 
-  pub fn execute(&self, window: &glfw::Window, state: &mut T) {
+  pub fn execute(&self, window: &glfw::Window, state: &mut T, delta: f32) {
 
     for function in &self.systems {
-      function(window, state);
+      function(window, state, delta);
     }
   }
 }
 
-pub type System<T> = fn(window: &glfw::Window, state: &mut T);
+pub type System<T> = fn(window: &glfw::Window, state: &mut T, delta: f32);
 

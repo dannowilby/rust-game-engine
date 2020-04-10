@@ -1,5 +1,7 @@
 
 extern crate glfw;
+extern crate image;
+extern crate tobj;
 
 // ecs
 
@@ -15,20 +17,23 @@ pub mod system;
 
 // comp_std
 
-#[path = "engine/comp_std/mesh.rs"]
+#[path = "comp_std/mesh.rs"]
 pub mod mesh;
 
-#[path = "engine/comp_std/shader.rs"]
+#[path = "comp_std/model.rs"]
+pub mod model;
+
+#[path = "comp_std/shader.rs"]
 pub mod shader;
+
+#[path = "comp_std/framebuffer.rs"]
+pub mod framebuffer;
 
 
 // util
 
-#[path = "engine/util/profiler.rs"]
+#[path = "util/profiler.rs"]
 pub mod profiler;
-
-#[path = "engine/util/lua.rs"]
-pub mod lua;
 
 
 // engine
@@ -45,13 +50,16 @@ pub mod state;
 #[path = "engine/player.rs"]
 pub mod player;
 
+#[path = "engine/lua.rs"]
+pub mod lua;
+
 
 // states
 
-pub mod animal;
-pub mod mine;
+//pub mod animal;
+//pub mod mine;
+#[path = "test/test.rs"]
 pub mod test;
-
 
 use crate::display::{ create_window };
 use crate::engine::{ Engine, start_engine };
@@ -69,7 +77,7 @@ fn main() {
 
   let (mut window, events, mut glfw) = create_window("Bashura", 800, 400);
   
-  let mut profiler = Profiler::new("bootup");
+  let mut profiler = Profiler::new();
   profiler.start();
 
   let mut engine = Engine::new();
@@ -77,6 +85,7 @@ fn main() {
   engine.add_state(GameState::new(init_test_state, destroy_test_state));
 
   profiler.end();
+  println!("\"bootup\" took {}s", profiler.delta);
 
   start_engine(&mut engine, &mut glfw, &mut window, events);
 }
