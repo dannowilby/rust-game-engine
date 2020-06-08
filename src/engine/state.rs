@@ -14,7 +14,8 @@ pub struct GameState {
   init: fn(y: &mut Self),
   destroy: fn(y: &mut Self),
 
-  pub systems: SystemManager<GameStateData>,
+  pub logic_systems: SystemManager<GameStateData>,
+  pub render_systems: SystemManager<GameStateData>,
 
   pub data: GameStateData,
 }
@@ -34,7 +35,8 @@ impl GameState {
   pub fn new(init: fn(y: &mut Self), destroy: fn(y: &mut Self)) -> GameState {
     GameState {
       
-      systems: SystemManager::new(),
+      logic_systems: SystemManager::new(),
+      render_systems: SystemManager::new(),
 
       data: GameStateData {
 

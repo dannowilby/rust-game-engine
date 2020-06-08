@@ -55,7 +55,8 @@ pub fn start_engine(engine: &mut Engine, glfw: &mut glfw::Glfw, window: &mut glf
     unsafe { gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT); }
 
     // systems execute
-    current_state.systems.execute(&window, &mut current_state.data, timer.delta);
+    current_state.logic_systems.execute(&window, &mut current_state.data, timer.delta);
+    current_state.render_systems.execute(&window, &mut current_state.data, timer.delta);
 
     for (_, event) in glfw::flush_messages(&events) {
       default_events(window, &event);
