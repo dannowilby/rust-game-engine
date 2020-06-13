@@ -42,7 +42,7 @@ pub fn init_test_state(gs: &mut GameState) {
   gs.render_systems.push(render_basic_mesh_system);
 
   gs.logic_systems.push(update_projection);
-  gs.systems.push(default_camera_controls);
+  gs.logic_systems.push(default_camera_controls);
 
   gs.data.lua.context(|_lua_ctx| {
     
